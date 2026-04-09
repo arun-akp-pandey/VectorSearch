@@ -1,10 +1,11 @@
+#1. Package Import
 import os
 import torch
 import timm
 from PIL import Image
 from pymilvus import MilvusClient, DataType
 
-# --- 1. Efficient Embedding Extraction ---
+#2. Efficient Embedding Extraction
 class OptimizedEncoder:
     def __init__(self):
         # Using a mid-sized model for balance between speed and accuracy
@@ -24,7 +25,7 @@ class OptimizedEncoder:
 
 encoder = OptimizedEncoder()
 
-# --- 2. Milvus Optimization Strategy ---
+#3. Milvus Optimization Strategy
 client = MilvusClient("optimized_search.db")
 COLLECTION = "image_vault"
 
@@ -45,11 +46,7 @@ if not client.has_collection(COLLECTION):
         index_params=index_params
     )
 
-# --- 3. Batch Insertion (Optimized for Throughput) ---
-#def add_images(paths):
-#   data = [{"vector": encoder.get_normalized_vector(p), "path": p} for p in paths]
-#    client.insert(collection_name=COLLECTION, data=data)
-
+#4. Batch Insertion (Optimized for Throughput)
 def add_images_from_directory():
     data = []
     id = 0
@@ -59,6 +56,7 @@ def add_images_from_directory():
         data.append({"vector": encoder.get_normalized_vector(p), "path": p, "id": id})
     client.insert(collection_name=COLLECTION, data=data)
     
+#5 Milvus Read Query
 def get_all_entities():
     results = client.query(
     collection_name=COLLECTION,
@@ -70,6 +68,7 @@ def get_all_entities():
     for item in results:
         print(item)
 
+#6 Milvus Drop Command
 def drop_collection():
     client.drop_collection(collection_name=COLLECTION)
 
