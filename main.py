@@ -1,0 +1,3 @@
+import OptimizedEncoder
+
+OptimizedEncoder.truncate_collection()
