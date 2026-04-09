@@ -1,3 +1,7 @@
 import OptimizedEncoder
 
-OptimizedEncoder.truncate_collection()
+#OptimizedEncoder.add_images_from_directory()
+
+OptimizedEncoder.get_all_entities()
+
+#OptimizedEncoder.drop_collection()

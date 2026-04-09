@@ -51,20 +51,15 @@ if not client.has_collection(COLLECTION):
 #    client.insert(collection_name=COLLECTION, data=data)
 
 def add_images_from_directory():
-    paths = []
+    data = []
     id = 0
     for filename in os.listdir("Images"):
         p = "Images/" + filename
-        data = []
         id = id + 1
         data.append({"vector": encoder.get_normalized_vector(p), "path": p, "id": id})
-        client.insert(collection_name=COLLECTION, data=data)
+    client.insert(collection_name=COLLECTION, data=data)
     
-
-# add_images_from_directory()
-
 def get_all_entities():
-    # Replace 'my_collection' with your collection name
     results = client.query(
     collection_name=COLLECTION,
     filter="",            # Empty filter retrieves all items
@@ -75,10 +70,7 @@ def get_all_entities():
     for item in results:
         print(item)
 
-get_all_entities()
-
 def drop_collection():
     client.drop_collection(collection_name=COLLECTION)
 
 
-# drop_collection()
