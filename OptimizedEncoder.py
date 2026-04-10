@@ -51,8 +51,12 @@ def add_images_from_directory():
         id = id + 1
         data.append({"vector": encoder.get_normalized_vector(p), "path": p, "id": id})
     client.insert(collection_name=COLLECTION, data=data)
+
+#5. Milvus Drop Command
+def drop_collection():
+    client.drop_collection(collection_name=COLLECTION)
     
-#5. Milvus Read Query
+#6. Milvus Read Query
 def get_all_entities():
     results = client.query(
     collection_name=COLLECTION,
@@ -63,6 +67,4 @@ def get_all_entities():
     for item in results:
         print(item)
 
-#6. Milvus Drop Command
-def drop_collection():
-    client.drop_collection(collection_name=COLLECTION)
+
