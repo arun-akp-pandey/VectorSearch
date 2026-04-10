@@ -61,10 +61,36 @@ def get_all_entities():
     results = client.query(
     collection_name=COLLECTION,
     filter="",            # Empty filter retrieves all items
-    output_fields=["*"],  # "*" returns all scalar fields (but not the vector)
+    output_fields=["path"],  # "*" returns all scalar fields (but not the vector)
     limit=100             # Good practice to limit results for large databases
     )
     for item in results:
         print(item)
+
+#7. Search By Image
+def search_by_image(query_image_path):
+    # Convert query image to vector
+    query_vector = encoder.get_normalized_vector(query_image_path)
+    
+    # Search Milvus using COSINE similarity
+    results = client.search(
+        collection_name=COLLECTION,
+        data=[query_vector],
+        limit=1,
+        output_fields=["path"],
+        search_params={"metric_type": "COSINE"} # Double check metric
+    )
+    
+    if results and results[0]:
+        match = results[0][0]
+        image_path = match['entity']['path']
+        score = match['distance'] # In Cosine, 1.0 is identical
+        
+        print(f"Match Found: {image_path} | Confidence: {score:.4f}")
+        return Image.open(image_path)
+    else:
+        print("No match found.")
+        return None
+
 
 
