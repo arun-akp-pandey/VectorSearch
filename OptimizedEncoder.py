@@ -50,22 +50,23 @@ def add_images_from_directory():
         p = "Images/" + filename
         id = id + 1
         data.append({"vector": encoder.get_normalized_vector(p), "path": p, "id": id})
-    client.insert(collection_name=COLLECTION, data=data)
+    message = client.insert(collection_name=COLLECTION, data=data)
+    return message
 
 #5. Milvus Drop Command
 def drop_collection():
     client.drop_collection(collection_name=COLLECTION)
+    return COLLECTION
     
 #6. Milvus Read Query
 def get_all_entities():
     results = client.query(
     collection_name=COLLECTION,
-    filter="",            # Empty filter retrieves all items
-    output_fields=["path"],  # "*" returns all scalar fields (but not the vector)
+    filter="",                # Empty filter retrieves all items
+    output_fields=["path"],
     limit=100             # Good practice to limit results for large databases
     )
-    for item in results:
-        print(item)
+    return results
 
 #7. Search By Image
 def search_by_image(query_image_path):
@@ -86,10 +87,8 @@ def search_by_image(query_image_path):
         image_path = match['entity']['path']
         score = match['distance'] # In Cosine, 1.0 is identical
         
-        print(f"Match Found: {image_path} | Confidence: {score:.4f}")
-        return Image.open(image_path)
+        return (image_path, score)
     else:
-        print("No match found.")
         return None
 
 

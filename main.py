@@ -1,9 +1,9 @@
 import OptimizedEncoder
 
-#OptimizedEncoder.add_images_from_directory()
+#print(OptimizedEncoder.add_images_from_directory())
 
-#OptimizedEncoder.get_all_entities()
+print(*(OptimizedEncoder.get_all_entities()), sep='\n')
 
-#OptimizedEncoder.drop_collection()
+#print(f"Collection deleted: {OptimizedEncoder.drop_collection()}")
 
-OptimizedEncoder.search_by_image("Argument/cat.jpeg")
+#print(OptimizedEncoder.search_by_image("Argument/cat.jpeg"))
