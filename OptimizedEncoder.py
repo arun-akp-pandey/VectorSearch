@@ -72,7 +72,6 @@ def get_all_entities():
 def search_by_image(query_image_path):
     # Convert query image to vector
     query_vector = encoder.get_normalized_vector(query_image_path)
-    
     # Search Milvus using COSINE similarity
     results = client.search(
         collection_name=COLLECTION,
@@ -81,12 +80,10 @@ def search_by_image(query_image_path):
         output_fields=["path"],
         search_params={"metric_type": "COSINE"} # Double check metric
     )
-    
     if results and results[0]:
         match = results[0][0]
         image_path = match['entity']['path']
         score = match['distance'] # In Cosine, 1.0 is identical
-        
         return (image_path, score)
     else:
         return None

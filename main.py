@@ -1,9 +1,9 @@
-import OptimizedEncoder
+import VectorContext
 
-#print(OptimizedEncoder.add_images_from_directory())
+#print(VectorContext.add_images_from_directory())
 
-print(*(OptimizedEncoder.get_all_entities()), sep='\n')
+#print(*(OptimizedEncoder.get_all_entities()), sep='\n')
 
-#print(f"Collection deleted: {OptimizedEncoder.drop_collection()}")
+#print(f"Collection deleted: {VectorContext.drop_collection()}")
 
-#print(OptimizedEncoder.search_by_image("Argument/cat.jpeg"))
+print(VectorContext.search_by_image("Argument/t.jpeg"))
