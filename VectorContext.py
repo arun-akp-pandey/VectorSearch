@@ -14,29 +14,24 @@ class OptimizedEncoder:
         self.model.eval()
         config = timm.data.resolve_data_config({}, model=self.model)
         self.transform = timm.data.create_transform(**config)
-
     def get_normalized_vector(self, img_path):
         img = Image.open(img_path).convert("RGB")
         tensor = self.transform(img).unsqueeze(0)
         with torch.no_grad():
         # Current output shape: [1, 197, 768] (Batch, Patches+1, Dim)
             out = self.model(tensor)
-        
         # If the model returns the full sequence, take only the CLS token (index 0)
         if out.ndim == 3:
             vec = out[0, 0, :] # Extract the first token's embedding
         else:
             vec = out.squeeze(0) # For models that already pool the result
-
         norm_vec = torch.nn.functional.normalize(vec, p=2, dim=0)
         return norm_vec.tolist()
-
 encoder = OptimizedEncoder()
 
 # 3. Milvus Optimization Strategy (Updated Dimension)
 client = MilvusClient("optimized_search.db")
 COLLECTION = "image_vault"
-
 if not client.has_collection(COLLECTION):
     index_params = client.prepare_index_params()
     index_params.add_index(
@@ -98,7 +93,6 @@ def search_by_image(query_image_path):
     )
     if results and results[0]:
         match = results[0][0]
-        # Use .get() or index access depending on Milvus version
         image_path = match['entity']['path']
         score = match['distance'] 
         return (image_path, score)
