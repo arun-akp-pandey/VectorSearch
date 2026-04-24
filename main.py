@@ -6,4 +6,4 @@ import VectorContext
 
 #print(f"Collection deleted: {VectorContext.drop_collection()}")
 
-print(VectorContext.search_by_image("Argument/t.jpeg"))
+print(VectorContext.search_by_image("Argument/los.jpg"))
